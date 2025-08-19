@@ -1,0 +1,1634 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>JKC - Just Keep Creating</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/lottie-web/5.12.2/lottie.min.js"></script>
+    <style>
+        :root {
+            /* iPhone-like colors */
+            --primary: #007AFF;
+            --primary-light: #5AC8FA;
+            --secondary: #5856D6;
+            --success: #34C759;
+            --warning: #FF9500;
+            --error: #FF3B30;
+            --accent: #AF52DE;
+
+            /* Modern glass backgrounds */
+            --bg-primary: #000000;
+            --bg-secondary: #1C1C1E;
+            --bg-tertiary: #2C2C2E;
+            --surface: rgba(44, 44, 46, 0.8);
+            --surface-elevated: rgba(58, 58, 60, 0.8);
+            --surface-overlay: rgba(72, 72, 74, 0.8);
+
+            /* Glass effects */
+            --glass-light: rgba(255, 255, 255, 0.1);
+            --glass-medium: rgba(255, 255, 255, 0.15);
+            --glass-strong: rgba(255, 255, 255, 0.25);
+            --glass-border: rgba(255, 255, 255, 0.2);
+
+            /* Text colors */
+            --text-primary: #FFFFFF;
+            --text-secondary: rgba(255, 255, 255, 0.8);
+            --text-tertiary: rgba(255, 255, 255, 0.6);
+            --text-quaternary: rgba(255, 255, 255, 0.4);
+
+            /* Blur values */
+            --blur-sm: 10px;
+            --blur-md: 20px;
+            --blur-lg: 40px;
+            --blur-xl: 60px;
+
+            /* Shadows */
+            --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.2);
+            --shadow-md: 0 4px 12px rgba(0, 0, 0, 0.15);
+            --shadow-lg: 0 8px 24px rgba(0, 0, 0, 0.2);
+            --shadow-xl: 0 16px 40px rgba(0, 0, 0, 0.3);
+
+            /* Border radius */
+            --radius-sm: 8px;
+            --radius-md: 12px;
+            --radius-lg: 16px;
+            --radius-xl: 20px;
+            --radius-2xl: 24px;
+        }
+
+        [data-theme="light"] {
+            --bg-primary: #F2F2F7;
+            --bg-secondary: #FFFFFF;
+            --bg-tertiary: #F2F2F7;
+            --surface: rgba(255, 255, 255, 0.8);
+            --surface-elevated: rgba(255, 255, 255, 0.9);
+            --surface-overlay: rgba(242, 242, 247, 0.8);
+
+            --glass-light: rgba(255, 255, 255, 0.7);
+            --glass-medium: rgba(255, 255, 255, 0.8);
+            --glass-strong: rgba(255, 255, 255, 0.9);
+            --glass-border: rgba(0, 0, 0, 0.1);
+
+            --text-primary: #000000;
+            --text-secondary: rgba(0, 0, 0, 0.8);
+            --text-tertiary: rgba(0, 0, 0, 0.6);
+            --text-quaternary: rgba(0, 0, 0, 0.4);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, system-ui, sans-serif;
+            background: linear-gradient(135deg,
+                    var(--bg-primary) 0%,
+                    var(--bg-secondary) 50%,
+                    var(--bg-tertiary) 100%);
+            color: var(--text-primary);
+            min-height: 100vh;
+            overflow-x: hidden;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+        }
+
+        /* Animated mesh gradient background */
+        .mesh-background {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            background:
+                radial-gradient(circle at 20% 20%, var(--primary) 0%, transparent 50%),
+                radial-gradient(circle at 80% 80%, var(--secondary) 0%, transparent 50%),
+                radial-gradient(circle at 40% 60%, var(--accent) 0%, transparent 50%);
+            opacity: 0.1;
+            animation: meshShift 20s ease-in-out infinite;
+        }
+
+        @keyframes meshShift {
+
+            0%,
+            100% {
+                background:
+                    radial-gradient(circle at 20% 20%, var(--primary) 0%, transparent 50%),
+                    radial-gradient(circle at 80% 80%, var(--secondary) 0%, transparent 50%),
+                    radial-gradient(circle at 40% 60%, var(--accent) 0%, transparent 50%);
+            }
+
+            50% {
+                background:
+                    radial-gradient(circle at 80% 30%, var(--primary) 0%, transparent 50%),
+                    radial-gradient(circle at 20% 70%, var(--secondary) 0%, transparent 50%),
+                    radial-gradient(circle at 60% 40%, var(--accent) 0%, transparent 50%);
+            }
+        }
+
+        /* Controls */
+        .control-panel {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            display: flex;
+            gap: 12px;
+            z-index: 1000;
+        }
+
+        .control-btn {
+            width: 44px;
+            height: 44px;
+            border: none;
+            border-radius: 50%;
+            background: var(--glass-medium);
+            backdrop-filter: blur(var(--blur-md));
+            -webkit-backdrop-filter: blur(var(--blur-md));
+            border: 1px solid var(--glass-border);
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 18px;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            color: var(--text-primary);
+            box-shadow: var(--shadow-md);
+        }
+
+        .control-btn:hover {
+            transform: scale(1.05);
+            background: var(--glass-strong);
+            box-shadow: var(--shadow-lg);
+        }
+
+        .control-btn:active {
+            transform: scale(0.95);
+        }
+
+        /* Enhanced Header with JKC Branding */
+        .header {
+            padding: 80px 24px 50px;
+            text-align: center;
+            background: linear-gradient(135deg,
+                    rgba(0, 122, 255, 0.1) 0%,
+                    rgba(88, 86, 214, 0.15) 30%,
+                    rgba(175, 82, 222, 0.1) 60%,
+                    rgba(52, 199, 89, 0.05) 100%);
+            backdrop-filter: blur(var(--blur-lg));
+            -webkit-backdrop-filter: blur(var(--blur-lg));
+            border-bottom: 1px solid var(--glass-border);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .header::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background:
+                radial-gradient(circle at 10% 20%, rgba(0, 122, 255, 0.1) 0%, transparent 50%),
+                radial-gradient(circle at 90% 80%, rgba(175, 82, 222, 0.08) 0%, transparent 50%),
+                radial-gradient(circle at 50% 50%, rgba(52, 199, 89, 0.05) 0%, transparent 50%);
+            animation: headerFloat 15s ease-in-out infinite;
+            z-index: -1;
+        }
+
+        @keyframes headerFloat {
+
+            0%,
+            100% {
+                background:
+                    radial-gradient(circle at 10% 20%, rgba(0, 122, 255, 0.1) 0%, transparent 50%),
+                    radial-gradient(circle at 90% 80%, rgba(175, 82, 222, 0.08) 0%, transparent 50%),
+                    radial-gradient(circle at 50% 50%, rgba(52, 199, 89, 0.05) 0%, transparent 50%);
+            }
+
+            50% {
+                background:
+                    radial-gradient(circle at 90% 30%, rgba(0, 122, 255, 0.12) 0%, transparent 50%),
+                    radial-gradient(circle at 20% 70%, rgba(175, 82, 222, 0.1) 0%, transparent 50%),
+                    radial-gradient(circle at 60% 40%, rgba(52, 199, 89, 0.08) 0%, transparent 50%);
+            }
+        }
+
+        .header-content {
+            max-width: 900px;
+            margin: 0 auto;
+            position: relative;
+            z-index: 1;
+        }
+
+        .brand-logo {
+            display: inline-block;
+            margin-bottom: 8px;
+            font-size: clamp(56px, 10vw, 84px);
+            font-weight: 900;
+            background: linear-gradient(135deg,
+                    var(--primary) 0%,
+                    var(--secondary) 30%,
+                    var(--accent) 60%,
+                    var(--success) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            letter-spacing: -0.05em;
+            animation: logoGlow 3s ease-in-out infinite alternate;
+            text-shadow: 0 0 30px rgba(0, 122, 255, 0.3);
+        }
+
+        @keyframes logoGlow {
+            0% {
+                filter: brightness(1) saturate(1);
+                transform: scale(1);
+            }
+
+            100% {
+                filter: brightness(1.1) saturate(1.2);
+                transform: scale(1.02);
+            }
+        }
+
+        .brand-tagline {
+            font-size: clamp(16px, 3vw, 24px);
+            font-weight: 600;
+            margin-bottom: 24px;
+            background: linear-gradient(90deg,
+                    var(--text-primary) 0%,
+                    var(--text-secondary) 50%,
+                    var(--text-primary) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+            animation: slideDown 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .header-subtitle {
+            font-size: 18px;
+            color: var(--text-secondary);
+            margin-bottom: 32px;
+            font-weight: 400;
+            opacity: 0.9;
+            animation: slideUp 0.8s cubic-bezier(0.4, 0, 0.2, 1) 0.1s backwards;
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+            gap: 16px;
+            max-width: 600px;
+            margin: 0 auto;
+            animation: fadeIn 0.8s cubic-bezier(0.4, 0, 0.2, 1) 0.2s backwards;
+        }
+
+        .stat-card {
+            background: var(--glass-medium);
+            backdrop-filter: blur(var(--blur-md));
+            -webkit-backdrop-filter: blur(var(--blur-md));
+            border: 1px solid var(--glass-border);
+            border-radius: var(--radius-lg);
+            padding: 20px;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            box-shadow: var(--shadow-sm);
+        }
+
+        .stat-card:hover {
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-lg);
+            background: var(--glass-strong);
+        }
+
+        .stat-value {
+            font-size: 28px;
+            font-weight: 700;
+            color: var(--text-primary);
+            margin-bottom: 4px;
+            letter-spacing: -0.02em;
+        }
+
+        .stat-label {
+            font-size: 13px;
+            color: var(--text-tertiary);
+            font-weight: 500;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        /* Main container */
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 32px 24px 80px;
+        }
+
+        /* Kanban board */
+        .board {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            gap: 24px;
+            margin-top: 32px;
+        }
+
+        .column {
+            background: var(--glass-medium);
+            backdrop-filter: blur(var(--blur-md));
+            -webkit-backdrop-filter: blur(var(--blur-md));
+            border: 1px solid var(--glass-border);
+            border-radius: var(--radius-xl);
+            padding: 20px;
+            min-height: 500px;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            box-shadow: var(--shadow-md);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .column::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 3px;
+            background: var(--column-gradient);
+            border-radius: var(--radius-xl) var(--radius-xl) 0 0;
+        }
+
+        .column[data-column="todo"] {
+            --column-gradient: linear-gradient(90deg, var(--warning), #FF6B00);
+            --column-color: var(--warning);
+        }
+
+        .column[data-column="progress"] {
+            --column-gradient: linear-gradient(90deg, var(--primary), var(--primary-light));
+            --column-color: var(--primary);
+        }
+
+        .column[data-column="done"] {
+            --column-gradient: linear-gradient(90deg, var(--success), #00C851);
+            --column-color: var(--success);
+        }
+
+        .column.drag-over {
+            background: var(--glass-strong);
+            transform: scale(1.02);
+            box-shadow: var(--shadow-xl);
+            border-color: var(--primary);
+        }
+
+        .column-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            padding-bottom: 16px;
+            border-bottom: 1px solid var(--glass-border);
+        }
+
+        .column-title {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 18px;
+            font-weight: 600;
+            color: var(--text-primary);
+        }
+
+        .column-icon {
+            width: 32px;
+            height: 32px;
+            border-radius: var(--radius-sm);
+            background: var(--column-gradient);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 16px;
+            box-shadow: var(--shadow-sm);
+        }
+
+        .column-count {
+            background: var(--glass-light);
+            border: 1px solid var(--glass-border);
+            border-radius: 20px;
+            padding: 6px 12px;
+            font-size: 12px;
+            font-weight: 600;
+            color: var(--text-secondary);
+            min-width: 24px;
+            text-align: center;
+        }
+
+        .task-list {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            min-height: 300px;
+        }
+
+        /* Tasks */
+        .task {
+            background: var(--surface-elevated);
+            backdrop-filter: blur(var(--blur-sm));
+            -webkit-backdrop-filter: blur(var(--blur-sm));
+            border: 1px solid var(--glass-border);
+            border-radius: var(--radius-lg);
+            padding: 16px;
+            cursor: move;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            position: relative;
+            overflow: hidden;
+            box-shadow: var(--shadow-sm);
+        }
+
+        .task::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 0;
+            bottom: 0;
+            width: 3px;
+            background: var(--task-color, var(--primary));
+            border-radius: 0 2px 2px 0;
+        }
+
+        .task:hover {
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-lg);
+            background: var(--surface-overlay);
+        }
+
+        .task.dragging {
+            opacity: 0.7;
+            transform: rotate(2deg) scale(1.02);
+            z-index: 1000;
+            box-shadow: var(--shadow-xl);
+        }
+
+        .task-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 8px;
+        }
+
+        .task-title {
+            font-weight: 600;
+            font-size: 16px;
+            color: var(--text-primary);
+            line-height: 1.4;
+            margin-right: 12px;
+            word-break: break-word;
+        }
+
+        .task-actions {
+            display: flex;
+            gap: 4px;
+            opacity: 0;
+            transition: opacity 0.2s ease;
+            flex-shrink: 0;
+        }
+
+        .task:hover .task-actions {
+            opacity: 1;
+        }
+
+        .task-btn {
+            width: 28px;
+            height: 28px;
+            border: none;
+            border-radius: var(--radius-sm);
+            background: var(--glass-light);
+            border: 1px solid var(--glass-border);
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.2s ease;
+            font-size: 12px;
+            color: var(--text-primary);
+        }
+
+        .task-btn:hover {
+            background: var(--glass-medium);
+            transform: scale(1.1);
+        }
+
+        .task-btn.edit:hover {
+            background: var(--primary);
+            color: white;
+        }
+
+        .task-btn.delete:hover {
+            background: var(--error);
+            color: white;
+        }
+
+        .task-description {
+            color: var(--text-secondary);
+            font-size: 14px;
+            line-height: 1.5;
+            margin-bottom: 12px;
+            word-break: break-word;
+        }
+
+        .task-footer {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 12px;
+            color: var(--text-tertiary);
+        }
+
+        .task-date {
+            display: flex;
+            align-items: center;
+            gap: 4px;
+        }
+
+        .task-image {
+            width: 100%;
+            height: 100px;
+            object-fit: cover;
+            border-radius: var(--radius-md);
+            margin: 8px 0;
+            border: 1px solid var(--glass-border);
+        }
+
+        /* Add task button */
+        .add-task {
+            background: var(--glass-light);
+            border: 2px dashed var(--glass-border);
+            border-radius: var(--radius-lg);
+            padding: 24px 16px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .add-task::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 0;
+            height: 0;
+            background: var(--primary);
+            border-radius: 50%;
+            transition: all 0.3s ease;
+            transform: translate(-50%, -50%);
+            opacity: 0;
+        }
+
+        .add-task:hover::before {
+            width: 200px;
+            height: 200px;
+            opacity: 0.1;
+        }
+
+        .add-task:hover {
+            border-color: var(--primary);
+            background: var(--glass-medium);
+            transform: translateY(-2px);
+        }
+
+        .add-task-content {
+            position: relative;
+            z-index: 2;
+        }
+
+        .add-task-icon {
+            width: 40px;
+            height: 40px;
+            margin: 0 auto 8px;
+            background: var(--primary);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 20px;
+            color: white;
+            box-shadow: var(--shadow-sm);
+        }
+
+        .add-task-text {
+            font-weight: 500;
+            color: var(--text-secondary);
+            font-size: 14px;
+        }
+
+        /* Modals */
+        .modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.6);
+            backdrop-filter: blur(var(--blur-md));
+            -webkit-backdrop-filter: blur(var(--blur-md));
+            display: none;
+            justify-content: center;
+            align-items: center;
+            z-index: 2000;
+            padding: 20px;
+        }
+
+        .modal.show {
+            display: flex;
+            animation: modalFadeIn 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        @keyframes modalFadeIn {
+            from {
+                opacity: 0;
+            }
+
+            to {
+                opacity: 1;
+            }
+        }
+
+        .modal-content {
+            background: var(--surface-elevated);
+            backdrop-filter: blur(var(--blur-lg));
+            -webkit-backdrop-filter: blur(var(--blur-lg));
+            border: 1px solid var(--glass-border);
+            border-radius: var(--radius-2xl);
+            padding: 32px;
+            width: 100%;
+            max-width: 480px;
+            position: relative;
+            box-shadow: var(--shadow-xl);
+            animation: modalSlideIn 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            max-height: 90vh;
+            overflow-y: auto;
+        }
+
+        @keyframes modalSlideIn {
+            from {
+                opacity: 0;
+                transform: translateY(-20px) scale(0.95);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0) scale(1);
+            }
+        }
+
+        .modal-close {
+            position: absolute;
+            top: 16px;
+            right: 16px;
+            width: 32px;
+            height: 32px;
+            border: none;
+            border-radius: 50%;
+            background: var(--glass-light);
+            border: 1px solid var(--glass-border);
+            color: var(--text-secondary);
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.2s ease;
+            font-size: 16px;
+        }
+
+        .modal-close:hover {
+            background: var(--error);
+            color: white;
+            transform: scale(1.1);
+        }
+
+        .modal-title {
+            font-size: 24px;
+            font-weight: 700;
+            margin-bottom: 24px;
+            color: var(--text-primary);
+            letter-spacing: -0.02em;
+        }
+
+        /* Form styles */
+        .form {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        .form-group {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .form-label {
+            font-weight: 600;
+            color: var(--text-primary);
+            font-size: 14px;
+        }
+
+        .form-input,
+        .form-textarea {
+            padding: 12px 16px;
+            border: 1px solid var(--glass-border);
+            border-radius: var(--radius-md);
+            background: var(--glass-light);
+            backdrop-filter: blur(var(--blur-sm));
+            -webkit-backdrop-filter: blur(var(--blur-sm));
+            color: var(--text-primary);
+            font-family: inherit;
+            font-size: 16px;
+            transition: all 0.3s ease;
+        }
+
+        .form-input:focus,
+        .form-textarea:focus {
+            outline: none;
+            border-color: var(--primary);
+            background: var(--glass-medium);
+            box-shadow: 0 0 0 4px rgba(0, 122, 255, 0.1);
+        }
+
+        .form-input::placeholder,
+        .form-textarea::placeholder {
+            color: var(--text-quaternary);
+        }
+
+        .color-picker-container {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .color-picker {
+            width: 48px;
+            height: 48px;
+            border: none;
+            border-radius: 50%;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border: 2px solid var(--glass-border);
+            box-shadow: var(--shadow-sm);
+        }
+
+        .color-picker:hover {
+            transform: scale(1.1);
+            box-shadow: var(--shadow-md);
+        }
+
+        .btn {
+            padding: 12px 24px;
+            border: none;
+            border-radius: var(--radius-md);
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            font-family: inherit;
+            font-size: 16px;
+            position: relative;
+            overflow: hidden;
+            box-shadow: var(--shadow-sm);
+        }
+
+        .btn-primary {
+            background: var(--primary);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background: #0056D6;
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-lg);
+        }
+
+        .btn-secondary {
+            background: var(--glass-medium);
+            color: var(--text-primary);
+            border: 1px solid var(--glass-border);
+        }
+
+        .btn-secondary:hover {
+            background: var(--glass-strong);
+            transform: translateY(-2px);
+        }
+
+        .btn-group {
+            display: flex;
+            gap: 12px;
+        }
+
+        /* Success modal */
+        .success-modal .modal-content {
+            text-align: center;
+            padding: 40px 32px;
+        }
+
+        .lottie-container {
+            width: 80px;
+            height: 80px;
+            margin: 0 auto 16px;
+        }
+
+        .success-message {
+            font-size: 18px;
+            font-weight: 600;
+            color: var(--success);
+            margin-bottom: 8px;
+        }
+
+        .success-description {
+            color: var(--text-secondary);
+            font-size: 14px;
+        }
+
+        /* Delete modal */
+        .delete-modal .modal-content {
+            text-align: center;
+            padding: 40px 32px;
+        }
+
+        .delete-icon {
+            font-size: 48px;
+            margin-bottom: 16px;
+            color: var(--error);
+        }
+
+        .delete-title {
+            font-size: 20px;
+            font-weight: 700;
+            color: var(--text-primary);
+            margin-bottom: 8px;
+        }
+
+        .delete-description {
+            color: var(--text-secondary);
+            margin-bottom: 24px;
+        }
+
+        /* Help modal */
+        .help-modal .modal-content {
+            max-width: 600px;
+        }
+
+        .help-section {
+            margin-bottom: 24px;
+            padding: 20px;
+            background: var(--glass-light);
+            border: 1px solid var(--glass-border);
+            border-radius: var(--radius-lg);
+            backdrop-filter: blur(var(--blur-sm));
+            -webkit-backdrop-filter: blur(var(--blur-sm));
+        }
+
+        .help-section p,
+        .help-section li {
+            color: var(--text-secondary);
+            line-height: 1.6;
+            font-size: 14px;
+        }
+
+        .help-section ul {
+            padding-left: 16px;
+            margin-top: 8px;
+        }
+
+        .help-section li {
+            margin-bottom: 6px;
+        }
+
+        /* Animations */
+        @keyframes slideDown {
+            from {
+                opacity: 0;
+                transform: translateY(-20px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes slideUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+            }
+
+            to {
+                opacity: 1;
+            }
+        }
+
+        /* Responsive design */
+        @media (max-width: 768px) {
+            .header {
+                padding: 40px 16px 24px;
+            }
+
+            .container {
+                padding: 20px 16px 60px;
+            }
+
+            .board {
+                grid-template-columns: 1fr;
+                gap: 16px;
+            }
+
+            .control-panel {
+                top: 16px;
+                right: 16px;
+                gap: 8px;
+            }
+
+            .control-btn {
+                width: 40px;
+                height: 40px;
+                font-size: 16px;
+            }
+
+            .modal {
+                padding: 16px;
+            }
+
+            .modal-content {
+                padding: 24px;
+            }
+
+            .stats-grid {
+                grid-template-columns: 1fr;
+                gap: 12px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="mesh-background"></div>
+
+    <!-- Control Panel -->
+    <div class="control-panel">
+        <button class="control-btn" id="themeToggle" title="Toggle theme">🌙</button>
+        <button class="control-btn" id="helpToggle" title="Help">❓</button>
+    </div>
+
+    <!-- Header -->
+    <header class="header">
+        <div class="header-content">
+            <div class="brand-logo">JKC</div>
+            <div class="brand-tagline">Just Keep Creating</div>
+            <p class="header-subtitle">Transform your ideas into reality with beautiful task management</p>
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <div class="stat-value" id="totalTasks">0</div>
+                    <div class="stat-label">Total</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-value" id="completedTasks">0</div>
+                    <div class="stat-label">Done</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-value" id="inProgressTasks">0</div>
+                    <div class="stat-label">Active</div>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <div class="container">
+        <div class="board">
+            <!-- To Do Column -->
+            <div class="column" data-column="todo" id="todo">
+                <div class="column-header">
+                    <div class="column-title">
+                        <div class="column-icon">📝</div>
+                        <span>To Do</span>
+                    </div>
+                    <div class="column-count">0</div>
+                </div>
+                <div class="task-list">
+                    <div class="add-task" onclick="openTaskModal('todo')">
+                        <div class="add-task-content">
+                            <div class="add-task-icon">+</div>
+                            <div class="add-task-text">Add Task</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- In Progress Column -->
+            <div class="column" data-column="progress" id="progress">
+                <div class="column-header">
+                    <div class="column-title">
+                        <div class="column-icon">🔄</div>
+                        <span>In Progress</span>
+                    </div>
+                    <div class="column-count">0</div>
+                </div>
+                <div class="task-list">
+                    <div class="add-task" onclick="openTaskModal('progress')">
+                        <div class="add-task-content">
+                            <div class="add-task-icon">+</div>
+                            <div class="add-task-text">Add Task</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Done Column -->
+            <div class="column" data-column="done" id="done">
+                <div class="column-header">
+                    <div class="column-title">
+                        <div class="column-icon">✅</div>
+                        <span>Done</span>
+                    </div>
+                    <div class="column-count">0</div>
+                </div>
+                <div class="task-list">
+                    <div class="add-task" onclick="openTaskModal('done')">
+                        <div class="add-task-content">
+                            <div class="add-task-icon">+</div>
+                            <div class="add-task-text">Add Task</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Task Modal -->
+    <div class="modal" id="taskModal">
+        <div class="modal-content">
+            <button class="modal-close" onclick="closeTaskModal()">&times;</button>
+            <h2 class="modal-title" id="modalTitle">Create New Task</h2>
+            <form class="form" id="taskForm">
+                <input type="hidden" id="taskId">
+                <input type="hidden" id="taskColumn">
+
+                <div class="form-group">
+                    <label class="form-label" for="taskTitle">Title</label>
+                    <input type="text" id="taskTitle" class="form-input" required placeholder="Enter task title">
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label" for="taskDescription">Description</label>
+                    <textarea id="taskDescription" class="form-textarea" rows="3"
+                        placeholder="Enter task description"></textarea>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label" for="taskDeadline">Deadline</label>
+                    <input type="datetime-local" id="taskDeadline" class="form-input">
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label">Color</label>
+                    <div class="color-picker-container">
+                        <div style="display: flex; align-items: center; gap: 16px; margin-bottom: 8px;">
+                            <label style="display: flex; align-items: center; gap: 8px; cursor: pointer;">
+                                <input type="radio" name="colorOption" value="default" id="defaultColor" checked
+                                    style="margin: 0;">
+                                <span style="font-size: 14px;">Use column color</span>
+                            </label>
+                            <label style="display: flex; align-items: center; gap: 8px; cursor: pointer;">
+                                <input type="radio" name="colorOption" value="custom" id="customColor"
+                                    style="margin: 0;">
+                                <span style="font-size: 14px;">Custom color</span>
+                            </label>
+                        </div>
+                        <div id="colorPickerSection" style="display: none;">
+                            <input type="color" id="taskColor" class="color-picker" value="#007AFF">
+                            <span style="color: var(--text-tertiary); font-size: 14px; margin-left: 12px;">Choose a
+                                custom color</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label" for="taskImage">Image</label>
+                    <input type="file" id="taskImage" class="form-input" accept="image/*">
+                </div>
+
+                <div class="btn-group">
+                    <button type="button" class="btn btn-secondary" onclick="closeTaskModal()">Cancel</button>
+                    <button type="submit" class="btn btn-primary" id="submitBtn">Create Task</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Success Modal -->
+    <div class="modal success-modal" id="successModal">
+        <div class="modal-content">
+            <div class="lottie-container" id="successAnimation">
+                <div style="font-size: 48px; color: var(--success);">✅</div>
+            </div>
+            <div class="success-message" id="successMessage">Task Created!</div>
+            <div class="success-description" id="successDescription">Your task has been added successfully</div>
+        </div>
+    </div>
+
+    <!-- Delete Confirmation Modal -->
+    <div class="modal delete-modal" id="deleteModal">
+        <div class="modal-content">
+            <div class="delete-icon">🗑️</div>
+            <div class="delete-title">Delete Task?</div>
+            <div class="delete-description">This action cannot be undone.</div>
+            <div class="btn-group">
+                <button class="btn btn-secondary" onclick="closeDeleteModal()">Cancel</button>
+                <button class="btn" style="background: var(--error); color: white;"
+                    onclick="confirmDelete()">Delete</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Help Modal -->
+    <div class="modal help-modal" id="helpModal">
+        <div class="modal-content">
+            <button class="modal-close" onclick="closeHelpModal()">&times;</button>
+            <h2 class="modal-title">🚀 Welcome to JKC</h2>
+
+            <div class="help-section">
+                <h3>✨ Just Keep Creating</h3>
+                <p>JKC is your creative productivity companion, designed to help you turn ideas into reality:</p>
+                <ul>
+                    <li><strong>To Do:</strong> Capture and organize your creative ideas</li>
+                    <li><strong>In Progress:</strong> Track your active projects and tasks</li>
+                    <li><strong>Done:</strong> Celebrate your completed creations</li>
+                </ul>
+            </div>
+
+            <div class="help-section">
+                <h3>➕ Creating Tasks</h3>
+                <p>Click "Add Task" in any column to create a new task. Customize with:</p>
+                <ul>
+                    <li>Title and description for your creative projects</li>
+                    <li>Deadline dates to keep your momentum</li>
+                    <li>Custom colors for organization and inspiration</li>
+                    <li>Image attachments for visual context</li>
+                </ul>
+            </div>
+
+            <div class="help-section">
+                <h3>🔄 Managing Your Creative Flow</h3>
+                <ul>
+                    <li><strong>Move:</strong> Drag and drop between columns as your work progresses</li>
+                    <li><strong>Edit:</strong> Click the pencil icon to refine your tasks</li>
+                    <li><strong>Delete:</strong> Click the trash icon to remove completed projects</li>
+                </ul>
+            </div>
+
+            <div class="help-section">
+                <h3>💡 Creative Pro Tips</h3>
+                <ul>
+                    <li>Use colors to categorize by project type or priority</li>
+                    <li>Your creative work is automatically saved</li>
+                    <li>Switch between light and dark themes for comfort</li>
+                    <li>Watch your creative progress with real-time stats</li>
+                    <li>Add images to visualize your projects and ideas</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Global variables
+        let tasks = [];
+        let editingTaskId = null;
+        let taskToDelete = null;
+        let theme = localStorage.getItem('jkc-theme') || 'dark';
+
+        // Initialize app
+        document.addEventListener('DOMContentLoaded', function () {
+            initializeTheme();
+            loadTasks();
+            setupEventListeners();
+        });
+
+        // Theme management
+        function initializeTheme() {
+            document.documentElement.setAttribute('data-theme', theme);
+            updateThemeIcon();
+        }
+
+        function toggleTheme() {
+            theme = theme === 'dark' ? 'light' : 'dark';
+            document.documentElement.setAttribute('data-theme', theme);
+            localStorage.setItem('jkc-theme', theme);
+            updateThemeIcon();
+        }
+
+        function updateThemeIcon() {
+            const themeToggle = document.getElementById('themeToggle');
+            themeToggle.textContent = theme === 'dark' ? '☀️' : '🌙';
+        }
+
+        // Task management
+        function loadTasks() {
+            const savedTasks = localStorage.getItem('jkc-tasks');
+            if (savedTasks) {
+                try {
+                    tasks = JSON.parse(savedTasks);
+                } catch (e) {
+                    console.error('Error parsing saved tasks:', e);
+                    tasks = [];
+                }
+            } else {
+                // Create welcome tasks
+                tasks = [
+                    {
+                        id: 'welcome-1',
+                        title: 'Welcome to JKC! 🎉',
+                        description: 'Just Keep Creating - your new productivity companion! This beautiful task manager will help you turn ideas into reality.',
+                        column: 'todo',
+                        color: null,
+                        deadline: '',
+                        image: null,
+                        createdAt: new Date().toISOString()
+                    },
+                    {
+                        id: 'welcome-2',
+                        title: 'Start Creating Something Amazing',
+                        description: 'Add colors, images, deadlines, and more to your tasks. Drag this card between columns to see the magic happen!',
+                        column: 'progress',
+                        color: null,
+                        deadline: '',
+                        image: null,
+                        createdAt: new Date().toISOString()
+                    }
+                ];
+                saveTasks();
+            }
+            renderAllTasks();
+            updateStats();
+        }
+
+        function saveTasks() {
+            try {
+                localStorage.setItem('jkc-tasks', JSON.stringify(tasks));
+            } catch (e) {
+                console.error('Error saving tasks:', e);
+            }
+        }
+
+        function renderAllTasks() {
+            // Clear task lists
+            document.querySelectorAll('.task-list').forEach(list => {
+                const addButton = list.querySelector('.add-task');
+                list.innerHTML = '';
+                list.appendChild(addButton);
+            });
+
+            // Render tasks
+            tasks.forEach(task => {
+                if (task && task.id && task.column) {
+                    renderTask(task);
+                }
+            });
+            updateColumnCounts();
+        }
+
+        function renderTask(task) {
+            if (!task || !task.id || !task.column) return;
+
+            const column = document.getElementById(task.column);
+            if (!column) return;
+
+            const taskList = column.querySelector('.task-list');
+            const addButton = taskList.querySelector('.add-task');
+
+            const taskElement = document.createElement('div');
+            taskElement.className = 'task';
+            taskElement.draggable = true;
+            taskElement.dataset.taskId = task.id;
+
+            // Use custom task color if set, otherwise use current column color
+            const taskColor = task.color || getColumnColor(task.column);
+            taskElement.style.setProperty('--task-color', taskColor);
+
+            const imageHtml = task.image ?
+                `<img src="${task.image}" alt="Task image" class="task-image">` : '';
+
+            const dateHtml = task.deadline ?
+                new Date(task.deadline).toLocaleDateString('en-US', {
+                    month: 'short',
+                    day: 'numeric',
+                    year: 'numeric'
+                }) : 'No deadline';
+
+            taskElement.innerHTML = `
+                <div class="task-header">
+                    <div class="task-title">${escapeHtml(task.title || 'Untitled Task')}</div>
+                    <div class="task-actions">
+                        <button class="task-btn edit" onclick="editTask('${task.id}')" title="Edit">✏️</button>
+                        <button class="task-btn delete" onclick="deleteTask('${task.id}')" title="Delete">🗑️</button>
+                    </div>
+                </div>
+                <div class="task-description">${escapeHtml(task.description || '')}</div>
+                ${imageHtml}
+                <div class="task-footer">
+                    <div class="task-date">📅 ${dateHtml}</div>
+                </div>
+            `;
+
+            // Add drag events
+            taskElement.addEventListener('dragstart', handleDragStart);
+            taskElement.addEventListener('dragend', handleDragEnd);
+
+            taskList.insertBefore(taskElement, addButton);
+        }
+
+        function getColumnColor(column) {
+            const columnColors = {
+                'todo': '#FF9500',
+                'progress': '#007AFF',
+                'done': '#34C759'
+            };
+            return columnColors[column] || '#007AFF';
+        }
+
+        function updateStats() {
+            const total = tasks.length;
+            const completed = tasks.filter(t => t.column === 'done').length;
+            const inProgress = tasks.filter(t => t.column === 'progress').length;
+
+            document.getElementById('totalTasks').textContent = total;
+            document.getElementById('completedTasks').textContent = completed;
+            document.getElementById('inProgressTasks').textContent = inProgress;
+        }
+
+        function updateColumnCounts() {
+            ['todo', 'progress', 'done'].forEach(columnId => {
+                const column = document.getElementById(columnId);
+                const count = tasks.filter(t => t.column === columnId).length;
+                column.querySelector('.column-count').textContent = count;
+            });
+        }
+
+        // Modal functions
+        function openTaskModal(column) {
+            editingTaskId = null;
+            document.getElementById('taskId').value = '';
+            document.getElementById('taskColumn').value = column;
+            document.getElementById('modalTitle').textContent = 'Create New Task';
+            document.getElementById('taskForm').reset();
+            document.getElementById('taskColor').value = '#007AFF';
+            document.getElementById('defaultColor').checked = true;
+            document.getElementById('customColor').checked = false;
+            document.getElementById('colorPickerSection').style.display = 'none';
+            document.getElementById('submitBtn').textContent = 'Create Task';
+            document.getElementById('taskModal').classList.add('show');
+            setTimeout(() => {
+                const titleInput = document.getElementById('taskTitle');
+                if (titleInput) titleInput.focus();
+            }, 100);
+        }
+
+        function closeTaskModal() {
+            document.getElementById('taskModal').classList.remove('show');
+        }
+
+        function editTask(taskId) {
+            const task = tasks.find(t => t.id === taskId);
+            if (!task) return;
+
+            editingTaskId = taskId;
+            document.getElementById('taskId').value = taskId;
+            document.getElementById('taskColumn').value = task.column;
+            document.getElementById('taskTitle').value = task.title || '';
+            document.getElementById('taskDescription').value = task.description || '';
+            document.getElementById('taskDeadline').value = task.deadline || '';
+
+            // Set color options based on whether task has custom color
+            if (task.color) {
+                document.getElementById('customColor').checked = true;
+                document.getElementById('defaultColor').checked = false;
+                document.getElementById('taskColor').value = task.color;
+                document.getElementById('colorPickerSection').style.display = 'block';
+            } else {
+                document.getElementById('defaultColor').checked = true;
+                document.getElementById('customColor').checked = false;
+                document.getElementById('colorPickerSection').style.display = 'none';
+            }
+
+            document.getElementById('modalTitle').textContent = 'Edit Task';
+            document.getElementById('submitBtn').textContent = 'Update Task';
+            document.getElementById('taskModal').classList.add('show');
+        }
+
+        function deleteTask(taskId) {
+            taskToDelete = taskId;
+            document.getElementById('deleteModal').classList.add('show');
+        }
+
+        function confirmDelete() {
+            if (taskToDelete) {
+                tasks = tasks.filter(t => t.id !== taskToDelete);
+                saveTasks();
+                renderAllTasks();
+                updateStats();
+                closeDeleteModal();
+                showSuccess('Task deleted!', 'Task has been removed successfully');
+                taskToDelete = null;
+            }
+        }
+
+        function closeDeleteModal() {
+            document.getElementById('deleteModal').classList.remove('show');
+        }
+
+        function closeHelpModal() {
+            document.getElementById('helpModal').classList.remove('show');
+        }
+
+        function showSuccess(title, description) {
+            document.getElementById('successMessage').textContent = title;
+            document.getElementById('successDescription').textContent = description;
+            document.getElementById('successModal').classList.add('show');
+
+            setTimeout(() => {
+                document.getElementById('successModal').classList.remove('show');
+            }, 2000);
+        }
+
+        // Drag and drop
+        function handleDragStart(e) {
+            this.classList.add('dragging');
+            e.dataTransfer.setData('text/plain', this.dataset.taskId);
+        }
+
+        function handleDragEnd() {
+            this.classList.remove('dragging');
+        }
+
+        // Event listeners
+        function setupEventListeners() {
+            // Theme toggle
+            const themeToggle = document.getElementById('themeToggle');
+            if (themeToggle) {
+                themeToggle.addEventListener('click', toggleTheme);
+            }
+
+            // Help modal
+            const helpToggle = document.getElementById('helpToggle');
+            if (helpToggle) {
+                helpToggle.addEventListener('click', () => {
+                    document.getElementById('helpModal').classList.add('show');
+                });
+            }
+
+            // Form submission
+            const taskForm = document.getElementById('taskForm');
+            if (taskForm) {
+                taskForm.addEventListener('submit', async function (e) {
+                    e.preventDefault();
+
+                    const useCustomColor = document.getElementById('customColor').checked;
+
+                    const taskData = {
+                        title: document.getElementById('taskTitle').value,
+                        description: document.getElementById('taskDescription').value,
+                        deadline: document.getElementById('taskDeadline').value,
+                        color: useCustomColor ? document.getElementById('taskColor').value : null,
+                        column: document.getElementById('taskColumn').value
+                    };
+
+                    // Handle image
+                    const imageFile = document.getElementById('taskImage').files[0];
+                    if (imageFile) {
+                        try {
+                            taskData.image = await convertToBase64(imageFile);
+                        } catch (e) {
+                            console.error('Error converting image:', e);
+                        }
+                    }
+
+                    if (editingTaskId) {
+                        // Update task
+                        const taskIndex = tasks.findIndex(t => t.id === editingTaskId);
+                        if (taskIndex !== -1) {
+                            tasks[taskIndex] = { ...tasks[taskIndex], ...taskData };
+                            showSuccess('Task updated!', 'Your changes have been saved');
+                        }
+                    } else {
+                        // Create task
+                        const newTask = {
+                            id: Date.now().toString() + Math.random().toString(36).substr(2, 9),
+                            ...taskData,
+                            createdAt: new Date().toISOString()
+                        };
+                        tasks.push(newTask);
+                        showSuccess('Task created!', 'Your new task has been added');
+                    }
+
+                    saveTasks();
+                    renderAllTasks();
+                    updateStats();
+                    closeTaskModal();
+                });
+
+                // Add event listeners for color option radio buttons
+                document.getElementById('defaultColor').addEventListener('change', function () {
+                    if (this.checked) {
+                        document.getElementById('colorPickerSection').style.display = 'none';
+                    }
+                });
+
+                document.getElementById('customColor').addEventListener('change', function () {
+                    if (this.checked) {
+                        document.getElementById('colorPickerSection').style.display = 'block';
+                    }
+                });
+            }
+
+            // Drag and drop
+            ['todo', 'progress', 'done'].forEach(columnId => {
+                const column = document.getElementById(columnId);
+                if (!column) return;
+
+                column.addEventListener('dragover', (e) => {
+                    e.preventDefault();
+                    column.classList.add('drag-over');
+                });
+
+                column.addEventListener('dragleave', (e) => {
+                    if (!column.contains(e.relatedTarget)) {
+                        column.classList.remove('drag-over');
+                    }
+                });
+
+                column.addEventListener('drop', (e) => {
+                    e.preventDefault();
+                    column.classList.remove('drag-over');
+
+                    const taskId = e.dataTransfer.getData('text/plain');
+                    const task = tasks.find(t => t.id === taskId);
+
+                    if (task && task.column !== columnId) {
+                        task.column = columnId;
+                        saveTasks();
+                        renderAllTasks();
+                        updateStats();
+                    }
+                });
+            });
+
+            // Close modals on backdrop click
+            document.addEventListener('click', (e) => {
+                if (e.target.classList.contains('modal')) {
+                    e.target.classList.remove('show');
+                }
+            });
+        }
+
+        // Utility functions
+        function convertToBase64(file) {
+            return new Promise((resolve, reject) => {
+                const reader = new FileReader();
+                reader.readAsDataURL(file);
+                reader.onload = () => resolve(reader.result);
+                reader.onerror = error => reject(error);
+            });
+        }
+
+        function escapeHtml(text) {
+            const div = document.createElement('div');
+            div.textContent = text;
+            return div.innerHTML;
+        }
+
+        // Global functions for onclick handlers
+        window.openTaskModal = openTaskModal;
+        window.closeTaskModal = closeTaskModal;
+        window.editTask = editTask;
+        window.deleteTask = deleteTask;
+        window.confirmDelete = confirmDelete;
+        window.closeDeleteModal = closeDeleteModal;
+        window.closeHelpModal = closeHelpModal;
+    </script>
+</body>
+
+</html>
